@@ -1,3 +1,6 @@
+const display = document.getElementById("displayDiv");
+let command = "";
+let buttonState = 0;
 
 // create the gameboard through IIFE factory function
 let gameBoard = (() => {
@@ -13,15 +16,13 @@ let gameControl = (() => {
     function createPlayer (name, symbol) {
         return {name, symbol};
     }
-
-    const submitButton = document.getElementById("formButton");
-    const p1Input = document.getElementById("p1Name");
-
-    const player1 = createPlayer(prompt("Player 1 please enter your name"), "X")
-    const player2 = createPlayer(prompt("Player 2 please enter your name"), "O")
+    
+    //create players using factory function
+    const player1 = createPlayer("", "X");
+    const player2 = createPlayer("", "O");
 
     let result = "";
-    gameState = ""
+    gameState = "";
 
     // work out who takes the first turn through rng
     const turn = Math.random() < 0.5 ? "Player 1" : "Player 2";
@@ -30,24 +31,12 @@ let gameControl = (() => {
 })();
 
 
-function gameLogic (gameControl, gameBoard) {
+function gameLogic (gameControl, gameBoard, command) {
 
-    // function that gets player action
-    function action() {
+    const player1Turn = `${gameControl.player1.name}'s turn, click to place your ${gameControl.player1.symbol}`;
+    const player2Turn = `${gameControl.player2.name}'s turn, click to place your ${gameControl.player2.symbol}`;
 
-        // const player1Turn = `${gameControl.player1.name}'s turn, type where you want to place your ${gameControl.player1.symbol}, e.g: "Top Middle"`;
-        // const player2Turn = `${gameControl.player2.name}'s turn, type where you want to place your ${gameControl.player2.symbol}, e.g: "Top Middle"`;
-
-        if (gameControl.turn === "Player 1") {
-            // let command = prompt(player1Turn);
-
-            return command.toLowerCase();
-        }
-             let command = prompt(player2Turn);
-             return command.toLowerCase();
-    };
-
-    //function for switching player turns
+    // function for switching player turns
     function turnSwitch () {
         if (gameControl.turn === "Player 1") {
             gameControl.turn = "Player 2";
@@ -57,13 +46,26 @@ function gameLogic (gameControl, gameBoard) {
         return;
     }
 
+    // update the display
+    function displayUpdate() {
+        if (gameControl.turn === "Player 1") {
+            display.innerHTML = player1Turn;
+        }
+        else { 
+            display.innerHTML = player2Turn;
+        }
+    }
+
+    if (gameControl.gameState === "Started") {
+        displayUpdate()
+    }
+
     //switch statement for setting player actions
     let existingCheck = false;
-
-    switch (action()) {
-        case "top left":
+    switch (command) {
+        case "topLeft":
             if (gameBoard.gameboard.topLeft !== "") {
-                    alert("Spot already taken");
+                    display.innerHTML = "Spot already taken";
                     existingCheck= true;
                     break;
                 }
@@ -71,16 +73,18 @@ function gameLogic (gameControl, gameBoard) {
                 gameBoard.gameboard.topLeft = gameControl.player1.symbol;
                 console.log(gameBoard.gameboard.topLeft);
                 turnSwitch();
+                displayUpdate()
                 break;
             }
             gameBoard.gameboard.topLeft = gameControl.player2.symbol;
             console.log(gameBoard.gameboard.topLeft);
             turnSwitch();
+            displayUpdate()
             break;
 
-        case "top middle":
+        case "topMiddle":
             if (gameBoard.gameboard.topMiddle !== "") {
-                    alert("Spot already taken");
+                    display.innerHTML = "Spot already taken";
                     existingCheck= true;
                     break;
             }
@@ -88,16 +92,18 @@ function gameLogic (gameControl, gameBoard) {
                 gameBoard.gameboard.topMiddle = gameControl.player1.symbol;
                 console.log(gameBoard.gameboard.topMiddle);
                 turnSwitch();
+                displayUpdate()
                 break;
             }
-           gameBoard.gameboard.topMiddle = gameControl.player2.symbol;
+            gameBoard.gameboard.topMiddle = gameControl.player2.symbol;
             console.log(gameBoard.gameboard.topMiddle);
             turnSwitch();
+            displayUpdate()
             break;
         
-        case "top right":
+        case "topRight":
             if (gameBoard.gameboard.topRight !== "") {
-                    alert("Spot already taken");
+                    display.innerHTML = "Spot already taken";
                     existingCheck= true;
                     break;
             }
@@ -105,16 +111,18 @@ function gameLogic (gameControl, gameBoard) {
                 gameBoard.gameboard.topRight = gameControl.player1.symbol;
                 console.log(gameBoard.gameboard.topRight);
                 turnSwitch();
+                displayUpdate()
                 break;
             }
             gameBoard.gameboard.topRight = gameControl.player2.symbol;
             console.log(gameBoard.gameboard.topRight);
             turnSwitch();
+            displayUpdate()
             break;
 
-        case "middle left":
+        case "middleLeft":
             if (gameBoard.gameboard.middleLeft !== "") {
-                    alert("Spot already taken");
+                    display.innerHTML = "Spot already taken";
                     existingCheck= true;
                     break;
             }
@@ -122,16 +130,18 @@ function gameLogic (gameControl, gameBoard) {
                 gameBoard.gameboard.middleLeft = gameControl.player1.symbol;
                 console.log(gameBoard.gameboard.middleLeft);
                 turnSwitch();
+                displayUpdate()
                 break;
             }
             gameBoard.gameboard.middleLeft = gameControl.player2.symbol;
             console.log(gameBoard.gameboard.middleLeft);
             turnSwitch();
+            displayUpdate()
             break;
 
-        case "middle middle":
+        case "middleMiddle":
             if (gameBoard.gameboard.middleMiddle !== "") {
-                    alert("Spot already taken");
+                    display.innerHTML = "Spot already taken";
                     existingCheck= true;
                     break;
             }
@@ -139,6 +149,7 @@ function gameLogic (gameControl, gameBoard) {
                 gameBoard.gameboard.middleMiddle = gameControl.player1.symbol;
                 console.log(gameBoard.gameboard.middleMiddle);
                 turnSwitch();
+                displayUpdate()
                 break;
             }
             gameBoard.gameboard.middleMiddle = gameControl.player2.symbol;
@@ -146,9 +157,9 @@ function gameLogic (gameControl, gameBoard) {
             turnSwitch();
             break;
         
-        case "middle right":
+        case "middleRight":
             if (gameBoard.gameboard.middleRight !== "") {
-                    alert("Spot already taken");
+                    display.innerHTML = "Spot already taken";
                     existingCheck= true;
                     break;
             }
@@ -156,16 +167,18 @@ function gameLogic (gameControl, gameBoard) {
                 gameBoard.gameboard.middleRight = gameControl.player1.symbol;
                 console.log(gameBoard.gameboard.middleRight);
                 turnSwitch();
+                displayUpdate()
                 break;
             }
             gameBoard.gameboard.middleRight = gameControl.player2.symbol;
             console.log(gameBoard.gameboard.middleRight);
             turnSwitch();
+            displayUpdate()
             break;
 
-        case "bottom left":
+        case "bottomLeft":
             if (gameBoard.gameboard.bottomLeft !== "") {
-                    alert("Spot already taken");
+                    display.innerHTML = "Spot already taken";
                     existingCheck= true;
                     break;
             }
@@ -173,16 +186,18 @@ function gameLogic (gameControl, gameBoard) {
                 gameBoard.gameboard.bottomLeft = gameControl.player1.symbol;
                 console.log(gameBoard.gameboard.bottomLeft);
                 turnSwitch();
+                displayUpdate()
                 break;
             }
             gameBoard.gameboard.bottomLeft = gameControl.player2.symbol;
             console.log(gameBoard.gameboard.bottomLeft);
             turnSwitch();
+            displayUpdate()
             break;
 
-        case "bottom middle":
+        case "bottomMiddle":
             if (gameBoard.gameboard.bottomMiddle !== "") {
-                    alert("Spot already taken");
+                    display.innerHTML = "Spot already taken";
                     existingCheck= true;
                     break;
             }
@@ -190,16 +205,18 @@ function gameLogic (gameControl, gameBoard) {
                 gameBoard.gameboard.bottomMiddle = gameControl.player1.symbol;
                 console.log(gameBoard.gameboard.bottomMiddle);
                 turnSwitch();
+                displayUpdate()
                 break;
             }
             gameBoard.gameboard.bottomMiddle = gameControl.player2.symbol;
             console.log(gameBoard.gameboard.bottomMiddle);
             turnSwitch();
+            displayUpdate()
             break;
         
-        case "bottom right":
+        case "bottomRight":
             if (gameBoard.gameboard.bottomRight !== "") {
-                    alert("Spot already taken");
+                    display.innerHTML = "Spot already taken";
                     existingCheck= true;
                     break;
             }
@@ -207,13 +224,19 @@ function gameLogic (gameControl, gameBoard) {
                 gameBoard.gameboard.bottomRight = gameControl.player1.symbol;
                 console.log(gameBoard.gameboard.bottomRight);
                 turnSwitch();
+                displayUpdate()
                 break;
             }
             gameBoard.gameboard.bottomRight = gameControl.player2.symbol;
             console.log(gameBoard.gameboard.bottomRight);
             turnSwitch();
+            displayUpdate()
             break;
     }
+
+    
+
+    gameControl.gameState = "Ongoing"
 
     // function for checking if game is over
     function winCheck() {
@@ -241,45 +264,96 @@ function gameLogic (gameControl, gameBoard) {
             }
     };
 
-    if (existingCheck === true) {
-        let squareCheck = 0;
-        for (square in gameBoard.gameboard) {
-            if (square === "") {
-                squareCheck ++;
-            }
+    let squareCheck = 0;
+    for (square in gameBoard.gameboard) {
+        if (gameBoard.gameboard[square] === "") {
+            squareCheck ++;
         }
-        if (squareCheck === 0){
-            gameControl.result = "Tie"
-        }
+    }
+    if (squareCheck === 0){
+        gameControl.result = "Tie"
     }
 
     winCheck();
     if (gameControl.result !== "") {
         if (gameControl.result === "Tie") {
-            alert(`Game result is a Tie`);
+            display.innerHTML = `Game result is a Tie`;
             return;
         }
-        alert(`Winner is ${gameControl.result}`);
+        display.innerHTML = `Winner is ${gameControl.result}`;
         return;
     }
 }
 
 function gameStart(gameControl, gameBoard) {
 
-    const startButton = document.getElementById("startRestart")
+    const startButton = document.getElementById("startRestart");
+
+    // event listener and action depending on start or restart
     startButton.addEventListener("click", () => {
-        gameControl.gameState = "Started"
-        while(gameControl.gameState = "Started") {
-            startButton.innerHTML = "Reset"
+        
+        if (buttonState === 1) {
+            buttonState = 0;
+            startButton.innerHTML = "Start";
+            const gameContainer = document.querySelectorAll(".gameContainer>button");
+            gameContainer.forEach(function(button) {button.innerHTML = ""});
+            gameControl.result = "";
+            gameControl.gameState = "";
+            display.innerHTML = "Enter names of players";
         }
-        while (gameControl.result === "") {
-            gameLogic(gameControl, gameBoard)
+
+        else {
+            buttonState = 1;
+            startButton.innerHTML = "Reset";
+            gameControl.gameState = "Started";
+            gameLogic(gameControl, gameBoard);
         }
+
     });
 
-};
+    const gameContainer = document.querySelectorAll(".gameContainer>button");
+    gameContainer.forEach(function(button) {
+        button.addEventListener("click", () => {
+            command = button.id;
+            console.log(command);
+            if (gameControl.turn === "Player 1" && button.innerHTML === "") {
+                button.innerHTML = `${gameControl.player1.symbol}`
+            }
+            else if (gameControl.turn === "Player 2" && button.innerHTML === "") {
+                button.innerHTML = `${gameControl.player2.symbol}`
+            }
+            if (buttonState === 1) {
+                gameLogic(gameControl, gameBoard, command);
+            }
+            
+        });
+    });
+}
 
-gameStart()
-    
+function formAction () {
+    const submitButton = document.getElementById("formButton");
+    display.innerHTML = "Enter names of players"
+
+    // get data from DOM
+    const p1Input = document.getElementById("p1Name");
+    const p2Input = document.getElementById("p2Name");
+
+    submitButton.addEventListener("click", (event) => {
+        event.preventDefault();
+        display.innerHTML = "Use start button to begin!"
+
+        gameControl.player1.name = p1Input.value;
+        gameControl.player2.name = p2Input.value;
+
+        // reset fields
+        p1Input.value = "";
+        p2Input.value = "";
+
+        // populate display
+        display.innerText = `Player 1: ${gameControl.player1.name} Player 2: ${gameControl.player2.name}`;
+    })
+}
 
 
+formAction()
+gameStart(gameControl, gameBoard)
