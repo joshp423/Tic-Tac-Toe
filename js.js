@@ -14,11 +14,14 @@ let gameControl = (() => {
         return {name, symbol};
     }
 
-    // const player1 = createPlayer(prompt("Player 1 please enter your name"), "X")
-    // const player2 = createPlayer(prompt("Player 2 please enter your name"), "O")
+    const submitButton = document.getElementById("formButton");
+    const p1Input = document.getElementById("p1Name");
+
+    const player1 = createPlayer(prompt("Player 1 please enter your name"), "X")
+    const player2 = createPlayer(prompt("Player 2 please enter your name"), "O")
 
     let result = "";
-    gameState = "Started"
+    gameState = ""
 
     // work out who takes the first turn through rng
     const turn = Math.random() < 0.5 ? "Player 1" : "Player 2";
@@ -261,7 +264,22 @@ function gameLogic (gameControl, gameBoard) {
     }
 }
 
-while (gameControl.result === "") {
-        gameLogic(gameControl, gameBoard)
-    }
+function gameStart(gameControl, gameBoard) {
+
+    const startButton = document.getElementById("startRestart")
+    startButton.addEventListener("click", () => {
+        gameControl.gameState = "Started"
+        while(gameControl.gameState = "Started") {
+            startButton.innerHTML = "Reset"
+        }
+        while (gameControl.result === "") {
+            gameLogic(gameControl, gameBoard)
+        }
+    });
+
+};
+
+gameStart()
+    
+
 
