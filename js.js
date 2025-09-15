@@ -14,8 +14,8 @@ let gameControl = (() => {
         return {name, symbol};
     }
 
-    const player1 = createPlayer(prompt("Player 1 please enter your name"), "X")
-    const player2 = createPlayer(prompt("Player 2 please enter your name"), "O")
+    // const player1 = createPlayer(prompt("Player 1 please enter your name"), "X")
+    // const player2 = createPlayer(prompt("Player 2 please enter your name"), "O")
 
     let result = "";
     gameState = "Started"
@@ -32,11 +32,12 @@ function gameLogic (gameControl, gameBoard) {
     // function that gets player action
     function action() {
 
-        const player1Turn = `${gameControl.player1.name}'s turn, type where you want to place your ${gameControl.player1.symbol}, e.g: "Top Middle"`;
-        const player2Turn = `${gameControl.player2.name}'s turn, type where you want to place your ${gameControl.player2.symbol}, e.g: "Top Middle"`;
+        // const player1Turn = `${gameControl.player1.name}'s turn, type where you want to place your ${gameControl.player1.symbol}, e.g: "Top Middle"`;
+        // const player2Turn = `${gameControl.player2.name}'s turn, type where you want to place your ${gameControl.player2.symbol}, e.g: "Top Middle"`;
 
         if (gameControl.turn === "Player 1") {
-            let command = prompt(player1Turn);
+            // let command = prompt(player1Turn);
+
             return command.toLowerCase();
         }
              let command = prompt(player2Turn);
