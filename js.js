@@ -1,6 +1,7 @@
 const display = document.getElementById("displayDiv");
 let command = "";
 let buttonState = 0;
+const gameContainer = document.querySelectorAll(".gameContainer>button");
 
 // create the gameboard through IIFE factory function
 let gameBoard = (() => {
@@ -71,13 +72,11 @@ function gameLogic (gameControl, gameBoard, command) {
                 }
             if (gameControl.turn === "Player 1") {
                 gameBoard.gameboard.topLeft = gameControl.player1.symbol;
-                console.log(gameBoard.gameboard.topLeft);
                 turnSwitch();
                 displayUpdate()
                 break;
             }
             gameBoard.gameboard.topLeft = gameControl.player2.symbol;
-            console.log(gameBoard.gameboard.topLeft);
             turnSwitch();
             displayUpdate()
             break;
@@ -90,13 +89,11 @@ function gameLogic (gameControl, gameBoard, command) {
             }
             if (gameControl.turn === "Player 1") {
                 gameBoard.gameboard.topMiddle = gameControl.player1.symbol;
-                console.log(gameBoard.gameboard.topMiddle);
                 turnSwitch();
                 displayUpdate()
                 break;
             }
             gameBoard.gameboard.topMiddle = gameControl.player2.symbol;
-            console.log(gameBoard.gameboard.topMiddle);
             turnSwitch();
             displayUpdate()
             break;
@@ -109,13 +106,11 @@ function gameLogic (gameControl, gameBoard, command) {
             }
             if (gameControl.turn === "Player 1") {
                 gameBoard.gameboard.topRight = gameControl.player1.symbol;
-                console.log(gameBoard.gameboard.topRight);
                 turnSwitch();
                 displayUpdate()
                 break;
             }
             gameBoard.gameboard.topRight = gameControl.player2.symbol;
-            console.log(gameBoard.gameboard.topRight);
             turnSwitch();
             displayUpdate()
             break;
@@ -128,13 +123,11 @@ function gameLogic (gameControl, gameBoard, command) {
             }
             if (gameControl.turn === "Player 1") {
                 gameBoard.gameboard.middleLeft = gameControl.player1.symbol;
-                console.log(gameBoard.gameboard.middleLeft);
                 turnSwitch();
                 displayUpdate()
                 break;
             }
             gameBoard.gameboard.middleLeft = gameControl.player2.symbol;
-            console.log(gameBoard.gameboard.middleLeft);
             turnSwitch();
             displayUpdate()
             break;
@@ -147,13 +140,11 @@ function gameLogic (gameControl, gameBoard, command) {
             }
             if (gameControl.turn === "Player 1") {
                 gameBoard.gameboard.middleMiddle = gameControl.player1.symbol;
-                console.log(gameBoard.gameboard.middleMiddle);
                 turnSwitch();
                 displayUpdate()
                 break;
             }
             gameBoard.gameboard.middleMiddle = gameControl.player2.symbol;
-            console.log(gameBoard.gameboard.middleMiddle);
             turnSwitch();
             break;
         
@@ -165,13 +156,11 @@ function gameLogic (gameControl, gameBoard, command) {
             }
             if (gameControl.turn === "Player 1") {
                 gameBoard.gameboard.middleRight = gameControl.player1.symbol;
-                console.log(gameBoard.gameboard.middleRight);
                 turnSwitch();
                 displayUpdate()
                 break;
             }
             gameBoard.gameboard.middleRight = gameControl.player2.symbol;
-            console.log(gameBoard.gameboard.middleRight);
             turnSwitch();
             displayUpdate()
             break;
@@ -184,13 +173,11 @@ function gameLogic (gameControl, gameBoard, command) {
             }
             if (gameControl.turn === "Player 1") {
                 gameBoard.gameboard.bottomLeft = gameControl.player1.symbol;
-                console.log(gameBoard.gameboard.bottomLeft);
                 turnSwitch();
                 displayUpdate()
                 break;
             }
             gameBoard.gameboard.bottomLeft = gameControl.player2.symbol;
-            console.log(gameBoard.gameboard.bottomLeft);
             turnSwitch();
             displayUpdate()
             break;
@@ -203,13 +190,11 @@ function gameLogic (gameControl, gameBoard, command) {
             }
             if (gameControl.turn === "Player 1") {
                 gameBoard.gameboard.bottomMiddle = gameControl.player1.symbol;
-                console.log(gameBoard.gameboard.bottomMiddle);
                 turnSwitch();
                 displayUpdate()
                 break;
             }
             gameBoard.gameboard.bottomMiddle = gameControl.player2.symbol;
-            console.log(gameBoard.gameboard.bottomMiddle);
             turnSwitch();
             displayUpdate()
             break;
@@ -222,19 +207,15 @@ function gameLogic (gameControl, gameBoard, command) {
             }
             if (gameControl.turn === "Player 1") {
                 gameBoard.gameboard.bottomRight = gameControl.player1.symbol;
-                console.log(gameBoard.gameboard.bottomRight);
                 turnSwitch();
                 displayUpdate()
                 break;
             }
             gameBoard.gameboard.bottomRight = gameControl.player2.symbol;
-            console.log(gameBoard.gameboard.bottomRight);
             turnSwitch();
             displayUpdate()
             break;
     }
-
-    
 
     gameControl.gameState = "Ongoing"
 
@@ -278,9 +259,11 @@ function gameLogic (gameControl, gameBoard, command) {
     if (gameControl.result !== "") {
         if (gameControl.result === "Tie") {
             display.innerHTML = `Game result is a Tie`;
+            gameControl.gameState = "Concluded"
             return;
         }
         display.innerHTML = `Winner is ${gameControl.result}`;
+        gameControl.gameState = "Concluded"
         return;
     }
 }
@@ -293,13 +276,21 @@ function gameStart(gameControl, gameBoard) {
     startButton.addEventListener("click", () => {
         
         if (buttonState === 1) {
+
+            //reset back to default
             buttonState = 0;
             startButton.innerHTML = "Start";
-            const gameContainer = document.querySelectorAll(".gameContainer>button");
-            gameContainer.forEach(function(button) {button.innerHTML = ""});
             gameControl.result = "";
             gameControl.gameState = "";
-            display.innerHTML = "Enter names of players";
+            display.innerHTML = "Press start to play again";
+
+            gameContainer.forEach(function(button) {
+                button.disabled = true;
+                button.innerHTML = "";
+            });
+
+            gameBoard.gameboard = {topLeft: "", topMiddle: "", topRight: "", middleLeft: "",
+            middleMiddle: "", middleRight: "", bottomLeft: "", bottomMiddle: "", bottomRight : ""}
         }
 
         else {
@@ -307,30 +298,35 @@ function gameStart(gameControl, gameBoard) {
             startButton.innerHTML = "Reset";
             gameControl.gameState = "Started";
             gameLogic(gameControl, gameBoard);
+            gameContainer.forEach(function(button) {
+                button.disabled = false;
+                button.innerHTML = "";
+            });
         }
 
     });
 
-    const gameContainer = document.querySelectorAll(".gameContainer>button");
     gameContainer.forEach(function(button) {
         button.addEventListener("click", () => {
             command = button.id;
-            console.log(command);
+            if (buttonState === 0 || gameControl.gameState === "Concluded") {
+                return;
+            }
             if (gameControl.turn === "Player 1" && button.innerHTML === "") {
                 button.innerHTML = `${gameControl.player1.symbol}`
             }
             else if (gameControl.turn === "Player 2" && button.innerHTML === "") {
                 button.innerHTML = `${gameControl.player2.symbol}`
-            }
+                }
             if (buttonState === 1) {
                 gameLogic(gameControl, gameBoard, command);
             }
-            
         });
     });
 }
 
-function formAction () {
+// set up form event listeners and inital populate of display
+const formAction = (() => {
     const submitButton = document.getElementById("formButton");
     display.innerHTML = "Enter names of players"
 
@@ -350,10 +346,9 @@ function formAction () {
         p2Input.value = "";
 
         // populate display
-        display.innerText = `Player 1: ${gameControl.player1.name} Player 2: ${gameControl.player2.name}`;
+        display.innerText = `Player 1: ${gameControl.player1.name} & Player 2: ${gameControl.player2.name}`;
     })
-}
+})();
 
-
-formAction()
+// calling game function to begin setup
 gameStart(gameControl, gameBoard)
